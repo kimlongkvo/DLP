@@ -5,7 +5,7 @@
 
 #define NUM_BANKS 16
 #define N_ELEMENTS 16384
-#define THREADS 16
+#define THREADS 32
 // includes, system
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,22 +27,11 @@ __global__ void sum_kernel(float *g_odata, float *g_idata, int n)
     //int tid = blockIdk.x * blockDim.x + threadIdx.x; //Another thread ID example for assigning unique thread
     //IDs across
     //different blocks
-
+    
+    //    g_odata[0] = 0;
     //float result = 0;
-
-    int threadEnd = (n/THREADS);
-// set s = (n/THREADS)/2 * tid
     
-    for(i = threadEnd * tid; i < (threadEnd * (tid+1)); i++)
-    {
-//         result += g_idata[i];
-        for (unsigned int s = (threadend * (tid+1))/2; s > 0; s >>= 1)
-        {
-            <#statements#>
-        }
-    }
-
-    
+    //    int threadEnd = (n/THREADS);
     
     for (unsigned int s = blockDim.x/2; s > 0 ; s >>= 1)
     {
@@ -59,11 +48,15 @@ __global__ void sum_kernel(float *g_odata, float *g_idata, int n)
     }
     
     
-
+    //    for(i = threadEnd * tid; i < (threadEnd * (tid+1)); i++)
+    //    {
+    //         result += g_idata[i];
+    //    }
+    //
     
-//    __syncthreads(); //Syncthreads forces all threads within a block to reach
-//Syncthreads does NOT synchronize different blocks (but you should not need to for this project).
-
+    //    __syncthreads(); //Syncthreads forces all threads within a block to reach
+    //Syncthreads does NOT synchronize different blocks (but you should not need to for this project).
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,8 +117,8 @@ runTest( int argc, char** argv)
     // allocate device memory input and output arrays
     float* d_idata;
     float* d_odata;
-//    int* d_idata;
-//    int* d_odata;
+    //    int* d_idata;
+    //    int* d_odata;
     cutilSafeCall( cudaMalloc( (void**) &d_idata, mem_size));
     cutilSafeCall( cudaMalloc( (void**) &d_odata, mem_size));
     
